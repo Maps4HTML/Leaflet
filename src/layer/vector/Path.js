@@ -1,7 +1,7 @@
 /*
  * @class Path
  * @aka L.Path
- * @inherits Layer
+ * @inherits Interactive layer
  *
  * An abstract class that contains options and constants shared between vector
  * overlays (Polygon, Polyline, Circle). Do not use it directly. Extends `Layer`.
@@ -37,11 +37,11 @@ L.Path = L.Layer.extend({
 		lineJoin: 'round',
 
 		// @option dashArray: String = null
-		// A string that defines the stroke [dash pattern](https://developer.mozilla.org/docs/Web/SVG/Attribute/stroke-dasharray). Doesn't work on canvas-powered layers (e.g. Android 2).
+		// A string that defines the stroke [dash pattern](https://developer.mozilla.org/docs/Web/SVG/Attribute/stroke-dasharray). Doesn't work on `Canvas`-powered layers in [some old browsers](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/setLineDash#Browser_compatibility).
 		dashArray: null,
 
 		// @option dashOffset: String = null
-		// A string that defines the [distance into the dash pattern to start the dash](https://developer.mozilla.org/docs/Web/SVG/Attribute/stroke-dashoffset). Doesn't work on canvas-powered layers
+		// A string that defines the [distance into the dash pattern to start the dash](https://developer.mozilla.org/docs/Web/SVG/Attribute/stroke-dashoffset). Doesn't work on `Canvas`-powered layers in [some old browsers](https://developer.mozilla.org/docs/Web/API/CanvasRenderingContext2D/setLineDash#Browser_compatibility).
 		dashOffset: null,
 
 		// @option fill: Boolean = depends
@@ -62,8 +62,7 @@ L.Path = L.Layer.extend({
 
 		// className: '',
 
-		// @option interactive: Boolean = true
-		// If `false`, the vector will not emit mouse events and will act as a part of the underlying map.
+		// Option inherited from "Interactive layer" abstract class
 		interactive: true
 	},
 

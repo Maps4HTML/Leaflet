@@ -97,7 +97,6 @@ L.Draggable = L.Evented.extend({
 		var first = e.touches ? e.touches[0] : e;
 
 		this._startPoint = new L.Point(first.clientX, first.clientY);
-		this._startPos = this._newPos = L.DomUtil.getPosition(this._element);
 
 		L.DomEvent
 			.on(document, L.Draggable.MOVE[e.type], this._onMove, this)
@@ -160,7 +159,7 @@ L.Draggable = L.Evented.extend({
 		this.fire('predrag', e);
 		L.DomUtil.setPosition(this._element, this._newPos);
 
-		// @event predrag: Event
+		// @event drag: Event
 		// Fired continuously during dragging.
 		this.fire('drag', e);
 	},
@@ -191,7 +190,7 @@ L.Draggable = L.Evented.extend({
 			// ensure drag is not fired after dragend
 			L.Util.cancelAnimFrame(this._animRequest);
 
-			// @event dragend: Event
+			// @event dragend: DragEndEvent
 			// Fired when the drag ends.
 			this.fire('dragend', {
 				distance: this._newPos.distanceTo(this._startPos)

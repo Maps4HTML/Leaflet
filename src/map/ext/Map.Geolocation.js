@@ -16,10 +16,12 @@ L.Map.include({
 	},
 
 	// @method locate(options?: Locate options): this
-	// Tries to locate the user using the Geolocation API, firing a `locationfound`
-	// event with location data on success or a `locationerror` event on failure,
+	// Tries to locate the user using the Geolocation API, firing a [`locationfound`](#map-locationfound)
+	// event with location data on success or a [`locationerror`](#map-locationerror) event on failure,
 	// and optionally sets the map view to the user's location with respect to
 	// detection accuracy (or to the world view if geolocation failed).
+	// Note that, if your page doesn't use HTTPS, this method will fail in
+	// modern browsers ([Chrome 50 and newer](https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-powerful-features-on-insecure-origins))
 	// See `Locate options` for more details.
 	locate: function (options) {
 

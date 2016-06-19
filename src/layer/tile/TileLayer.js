@@ -26,13 +26,13 @@
  * ```
  * L.tileLayer('http://{s}.somedomain.com/{foo}/{z}/{x}/{y}.png', {foo: 'bar'});
  * ```
- *
- * @section
  */
 
 
 L.TileLayer = L.GridLayer.extend({
 
+	// @section
+	// @aka TileLayer options
 	options: {
 		// @option minZoom: Number = 0
 		// Minimum zoom number.
@@ -61,7 +61,7 @@ L.TileLayer = L.GridLayer.extend({
 		zoomOffset: 0,
 
 		// @option tms: Boolean = false
-		// If `true`, inverses Y axis numbering for tiles (turn this on for TMS services).
+		// If `true`, inverses Y axis numbering for tiles (turn this on for [TMS](https://en.wikipedia.org/wiki/Tile_Map_Service) services).
 		tms: false,
 
 		// @option zoomReverse: Boolean = false
@@ -87,10 +87,16 @@ L.TileLayer = L.GridLayer.extend({
 		if (options.detectRetina && L.Browser.retina && options.maxZoom > 0) {
 
 			options.tileSize = Math.floor(options.tileSize / 2);
-			options.zoomOffset++;
+
+			if (!options.zoomReverse) {
+				options.zoomOffset++;
+				options.maxZoom--;
+			} else {
+				options.zoomOffset--;
+				options.minZoom++;
+			}
 
 			options.minZoom = Math.max(0, options.minZoom);
-			options.maxZoom--;
 		}
 
 		if (typeof options.subdomains === 'string') {
@@ -236,7 +242,7 @@ L.TileLayer = L.GridLayer.extend({
 });
 
 
-// @factory L.tilelayer(urlTemplate: String, options? TileLayer options)
+// @factory L.tilelayer(urlTemplate: String, options?: TileLayer options)
 // Instantiates a tile layer object given a `URL template` and optionally an options object.
 
 L.tileLayer = function (url, options) {

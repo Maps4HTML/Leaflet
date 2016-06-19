@@ -6,7 +6,7 @@
 // @section Interaction Options
 L.Map.mergeOptions({
 	// @section Touch interaction options
-	// @option touchZoom: Boolean = *
+	// @option touchZoom: Boolean|String = *
 	// Whether the map can be zoomed by touch-dragging with two fingers. If
 	// passed `'center'`, it will zoom to the center of the view regardless of
 	// where the touch events (fingers) were. Enabled for touch-capable web
@@ -21,10 +21,12 @@ L.Map.mergeOptions({
 
 L.Map.TouchZoom = L.Handler.extend({
 	addHooks: function () {
+		L.DomUtil.addClass(this._map._container, 'leaflet-touch-zoom');
 		L.DomEvent.on(this._map._container, 'touchstart', this._onTouchStart, this);
 	},
 
 	removeHooks: function () {
+		L.DomUtil.removeClass(this._map._container, 'leaflet-touch-zoom');
 		L.DomEvent.off(this._map._container, 'touchstart', this._onTouchStart, this);
 	},
 

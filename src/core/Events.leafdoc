@@ -32,8 +32,8 @@ The geographical point where the mouse event occured.
 Pixel coordinates of the point where the mouse event occured relative to the map layer.
 @property containerPoint: Point
 Pixel coordinates of the point where the mouse event occured relative to the map сontainer.
-@property originalEvent: DOMMouseEvent
-The original DOM mouse event fired by the browser.
+@property originalEvent: DOM MouseEvent
+The original [DOM mouse event](https://developer.mozilla.org/docs/Web/API/MouseEvent) fired by the browser.
 
 
 
@@ -65,12 +65,12 @@ Error code (if applicable).
 
 @miniclass LayerEvent (Event objects)
 @inherits Event
-@property layer: ILayer
+@property layer: Layer
 The layer that was added or removed.
 
 @miniclass LayersControlEvent (Event objects)
 @inherits Event
-@property layer: ILayer
+@property layer: Layer
 The layer that was added or removed.
 @property name: String
 The name of the layer that was added or removed.
@@ -79,11 +79,17 @@ The name of the layer that was added or removed.
 @inherits Event
 @property tile: HTMLElement
 The tile element (image).
+@property coords: Point
+Point object with the tile's `x`, `y`, and `z` (zoom level) coordinates.
 
 @miniclass TileErrorEvent (Event objects)
 @inherits Event
 @property tile: HTMLElement
 The tile element (image).
+@property coords: Point
+Point object with the tile's `x`, `y`, and `z` (zoom level) coordinates.
+@property error: *
+Error passed to the tile's `done()` callback.
 
 @miniclass ResizeEvent (Event objects)
 @inherits Event
@@ -92,9 +98,9 @@ The old size before resize event.
 @property newSize: Point
 The new size after the resize event.
 
-@miniclass GeoJSON event (Event objects)
+@miniclass GeoJSONEvent (Event objects)
 @inherits Event
-@property layer: ILayer
+@property layer: Layer
 The layer for the GeoJSON feature that is being added to the map.
 @property properties: Object
 GeoJSON properties of the feature.
@@ -103,7 +109,7 @@ GeoJSON geometry type of the feature.
 @property id: String
 GeoJSON ID of the feature (if present).
 
-@miniclass Popup event (Event objects)
+@miniclass PopupEvent (Event objects)
 @inherits Event
 @property popup: Popup
 The popup that was opened or closed.

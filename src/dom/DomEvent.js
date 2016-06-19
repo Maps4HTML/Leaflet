@@ -37,14 +37,15 @@ L.DomEvent = {
 		return this;
 	},
 
-	// @function off(el: HTMLElement, types: String, fn: Function, context?: Object)
+	// @function off(el: HTMLElement, types: String, fn: Function, context?: Object): this
 	// Removes a previously added listener function. If no function is specified,
 	// it will remove all the listeners of that particular DOM event from the element.
 	// Note that if you passed a custom context to on, you must pass the same
 	// context to `off` in order to remove the listener.
 
 	// @alternative
-	// @function off(el: HTMLElement, types: eventMap: Object, context?: Object): this
+	// @function off(el: HTMLElement, eventMap: Object, context?: Object): this
+	// Removes a set of type/listener pairs, e.g. `{click: onClick, mousemove: onMouseMove}`
 	off: function (obj, types, fn, context) {
 
 		if (typeof types === 'object') {
@@ -224,15 +225,21 @@ L.DomEvent = {
 			e.clientY - rect.top - container.clientTop);
 	},
 
+	// Chrome on Win scrolls double the pixels as in other platforms (see #4538),
+	// and Firefox scrolls device pixels, not CSS pixels
+	_wheelPxFactor: (L.Browser.win && L.Browser.chrome) ? 2 :
+	                (L.Browser.gecko) ? window.devicePixelRatio :
+	                1,
+
 	// @function getWheelDelta(ev: DOMEvent): Number
 	// Gets normalized wheel delta from a mousewheel DOM event, in vertical
 	// pixels scrolled (negative if scrolling down).
 	// Events from pointing devices without precise scrolling are mapped to
 	// a best guess of between 50-60 pixels.
 	getWheelDelta: function (e) {
-		return (e.deltaY && e.deltaMode === 0) ? -e.deltaY :        // Pixels
-		       (e.deltaY && e.deltaMode === 1) ? -e.deltaY * 18 :   // Lines
-		       (e.deltaY && e.deltaMode === 2) ? -e.deltaY * 52 :   // Pages
+		return (e.deltaY && e.deltaMode === 0) ? -e.deltaY / L.DomEvent._wheelPxFactor : // Pixels
+		       (e.deltaY && e.deltaMode === 1) ? -e.deltaY * 18 : // Lines
+		       (e.deltaY && e.deltaMode === 2) ? -e.deltaY * 52 : // Pages
 		       (e.deltaX || e.deltaZ) ? 0 :	// Skip horizontal/depth wheel events
 		       e.wheelDelta ? (e.wheelDeltaY || e.wheelDelta) / 2 : // Legacy IE pixels
 		       (e.detail && Math.abs(e.detail) < 32765) ? -e.detail * 18 : // Legacy Moz lines

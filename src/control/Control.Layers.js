@@ -85,8 +85,8 @@ L.Control.Layers = L.Control.extend({
 	onRemove: function () {
 		this._map.off('zoomend', this._checkDisabledLayers, this);
 
-		for (var id in this._layers) {
-			this._layers[id].layer.off('add remove', this._onLayerChange, this);
+		for (var i = 0; i < this._layers.length; i++) {
+			this._layers[i].layer.off('add remove', this._onLayerChange, this);
 		}
 	},
 
@@ -110,7 +110,9 @@ L.Control.Layers = L.Control.extend({
 		layer.off('add remove', this._onLayerChange, this);
 
 		var obj = this._getLayer(L.stamp(layer));
-		this._layers.splice(this._layers.indexOf(obj), 1);
+		if (obj) {
+			this._layers.splice(this._layers.indexOf(obj), 1);
+		}
 		return (this._map) ? this._update() : this;
 	},
 
@@ -190,8 +192,9 @@ L.Control.Layers = L.Control.extend({
 	},
 
 	_getLayer: function (id) {
-		for (var i = 0; i <= this._layers.length; i++) {
-			if (L.stamp(this._layers[i].layer) === id) {
+		for (var i = 0; i < this._layers.length; i++) {
+
+			if (this._layers[i] && L.stamp(this._layers[i].layer) === id) {
 				return this._layers[i];
 			}
 		}
@@ -220,7 +223,7 @@ L.Control.Layers = L.Control.extend({
 
 		var baseLayersPresent, overlaysPresent, i, obj, baseLayersCount = 0;
 
-		for (i in this._layers) {
+		for (i = 0; i < this._layers.length; i++) {
 			obj = this._layers[i];
 			this._addItem(obj);
 			overlaysPresent = overlaysPresent || obj.overlay;

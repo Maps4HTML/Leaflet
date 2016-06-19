@@ -62,7 +62,11 @@ L.Util = {
 
 	// @function throttle(fn: Function, time: Number, context: Object): Function
 	// Returns a function which executes function `fn` with the given scope `context`
-	// (so that the `this` keyword refers to `context` inside `fn`'s code). The arguments received by the bound function will be any arguments passed when binding the function, followed by any arguments passed when invoking the bound function. Has an `L.bind` shortcut.
+	// (so that the `this` keyword refers to `context` inside `fn`'s code). The function
+	// `fn` will be called no more than one time per given amount of `time`. The arguments
+	// received by the bound function will be any arguments passed when binding the
+	// function, followed by any arguments passed when invoking the bound function.
+	// Has an `L.bind` shortcut.
 	throttle: function (fn, time, context) {
 		var lock, args, wrapperFn, later;
 
@@ -125,7 +129,7 @@ L.Util = {
 		return L.Util.trim(str).split(/\s+/);
 	},
 
-	// @function setOptions(obj: Object: options: Object): Object
+	// @function setOptions(obj: Object, options: Object): Object
 	// Merges the given properties to the `options` of the `obj` object, returning the resulting options. See `Class options`. Has an `L.setOptions` shortcut.
 	setOptions: function (obj, options) {
 		if (!obj.hasOwnProperty('options')) {
@@ -150,7 +154,7 @@ L.Util = {
 		return ((!existingUrl || existingUrl.indexOf('?') === -1) ? '?' : '&') + params.join('&');
 	},
 
-	// @template (str: String, data: Object)
+	// @function template(str: String, data: Object): String
 	// Simple templating facility, accepts a template string of the form `'Hello {a}, {b}'`
 	// and a data object like `{a: 'foo', b: 'bar'}`, returns evaluated string
 	// `('Hello foo, bar')`. You can also specify functions instead of strings for
@@ -177,7 +181,7 @@ L.Util = {
 		return (Object.prototype.toString.call(obj) === '[object Array]');
 	},
 
-	// @function indexOf: Number
+	// @function indexOf(array: Array, el: Object): Number
 	// Compatibility polyfill for [Array.prototype.indexOf](https://developer.mozilla.org/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf)
 	indexOf: function (array, el) {
 		for (var i = 0; i < array.length; i++) {
@@ -216,12 +220,12 @@ L.Util = {
 	               getPrefixed('CancelRequestAnimationFrame') || function (id) { window.clearTimeout(id); };
 
 
-	// @function requestAnimFrame(fn: Function, context?: Object, immediate?: Boolean): requestId: Number
+	// @function requestAnimFrame(fn: Function, context?: Object, immediate?: Boolean): Number
 	// Schedules `fn` to be executed when the browser repaints. `fn` is bound to
 	// `context` if given. When `immediate` is set, `fn` is called immediately if
 	// the browser doesn't have native support for
 	// [`window.requestAnimationFrame`](https://developer.mozilla.org/docs/Web/API/window/requestAnimationFrame),
-	// otherwise it's delayed. Returns an id that can be used to cancel the request.
+	// otherwise it's delayed. Returns a request ID that can be used to cancel the request.
 	L.Util.requestAnimFrame = function (fn, context, immediate) {
 		if (immediate && requestFn === timeoutDefer) {
 			fn.call(context);
@@ -230,7 +234,7 @@ L.Util = {
 		}
 	};
 
-	// @function cancelAnimFrame(id: Number)
+	// @function cancelAnimFrame(id: Number): undefined
 	// Cancels a previous `requestAnimFrame`. See also [window.cancelAnimationFrame](https://developer.mozilla.org/docs/Web/API/window/cancelAnimationFrame).
 	L.Util.cancelAnimFrame = function (id) {
 		if (id) {
