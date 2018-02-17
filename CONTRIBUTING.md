@@ -4,8 +4,11 @@ Contributing to Leaflet
  1. [Getting Involved](#getting-involved)
  2. [Reporting Bugs](#reporting-bugs)
  3. [Contributing Code](#contributing-code)
- 4. [Improving Documentation](#improving-documentation)
- 5. [Code of Conduct](#code-of-conduct)
+ 4. [Running the Tests](#running-the-tests)
+ 5. [Code Coverage](#code-coverage)
+ 6. [Improving Documentation](#improving-documentation)
+ 7. [Code of Conduct](#code-of-conduct)
+ 8. [Thank You](#thank-you)
 
 ## Getting Involved
 
@@ -65,16 +68,17 @@ please consider submitting another pull request with the corresponding [document
 
 ### Setting up the Build System
 
-The Leaflet build system uses [Node](http://nodejs.org/), and the [Jake](http://jakejs.com/) Javascript build tool.
-To set up the Leaflet build system, install Node then run the following commands in the project root to install Jake:
+The Leaflet build system uses [NodeJS](http://nodejs.org/).
+To set up the Leaflet build system, install [NodeJS](https://nodejs.org/).
+Then run the following commands in the project root to install dependencies:
 
 ```
-npm install -g jake
 npm install
 ```
-
-You can build minified Leaflet by running `jake` (it will be built from source in the `dist` folder).
-For a custom build with selected components, open `build/build.html` in the browser and follow the instructions from there.
+or, if you prefer [`yarn`](https://yarnpkg.com/) over `npm`:
+```
+yarn install
+```
 
 ### Making Changes to Leaflet Source
 
@@ -88,13 +92,32 @@ Please do not commit to the `master` branch, or your unrelated changes will go i
 You should also follow the code style and whitespace conventions of the original codebase.
 In particular, use tabs for indentation and spaces for alignment.
 
-Before committing your changes, run `jake lint` to catch any JS errors in the code and fix them.
+Before committing your changes, run `npm run lint` to catch any JS errors in the code and fix them.
 If you add any new files to the Leaflet source, make sure to also add them to `build/deps.js`
 so that the build system knows about them.
 
 Also, please make sure that you have [line endings configured properly](https://help.github.com/articles/dealing-with-line-endings) in Git! Otherwise the diff will show that all lines of a file were changed even if you touched only one.
 
 Happy coding!
+
+### Using RollupJS
+
+The source JavaScript code for Leaflet is a few dozen files, in the `src/` directory.
+But normally, Leaflet is loaded in a web browser as just one JavaScript file.
+
+In order to create this file, run `npm run rollup` or `yarn run rollup`.
+
+You'll find `dist/leaflet-src.js` and `dist/leaflet.js`. The difference is that
+`dist/leaflet-src.js` has sourcemaps and it's not uglified, so it's better for
+development. `dist/leaflet.js` is uglified and thus is smaller, so it's better
+for deployment.
+
+When developing (or bugfixing) core Leaflet functionalities, it's common to use
+the webpages in the `debug/` directory, and run the unit tests (`spec/index.html`)
+in a graphical browser. This requires regenerating the bundled files quickly.
+
+In order to do so, run `npm run watch` or `yarn run watch`. This will keep
+on rebuilding the bundles whenever any source file changes.
 
 ## Running the Tests
 
@@ -103,13 +126,13 @@ install [PhantomJS](http://phantomjs.org/) (and make sure it's in your `PATH`),
 then run:
 
 ```
-jake test
+npm test
 ```
 
 To run all the tests in actual browsers at the same time, you can do:
 
 ```
-jake test --ff --chrome --safari --ie
+npm test -- --browsers Firefox,Chrome,Safari,IE
 ```
 
 To run the tests in a browser manually, open `spec/index.html`.
@@ -119,21 +142,21 @@ To run the tests in a browser manually, open `spec/index.html`.
 To generate a detailed report about test coverage (which helps tremendously when working on test improvements), run:
 
 ```
-jake test --cov
+npm test -- --cov
 ```
 
-After that, open `spec/coverage/<environment>/index.html` in a browser to see the report.
+After that, open `coverage/<environment>/index.html` in a browser to see the report.
 From there you can click through folders/files to get details on their individual coverage.
 
 ## Improving Documentation
 
-The code of the live Leaflet website that contains all documentation and examples is located in the `gh-pages` branch
+The code of the live Leaflet website that contains all documentation and examples is located in the `docs/` directory of the `master` branch
 and is automatically generated from a set of HTML and Markdown files by [Jekyll](http://jekyllrb.com/).
 
 The easiest way to make little improvements such as fixing typos without even leaving the browser
 is by editing one of the files with the online GitHub editor:
-browse the [gh-pages branch](https://github.com/Leaflet/Leaflet/tree/gh-pages),
-choose a certain file for editing (e.g. `plugins.html` for the list of Leaflet plugins),
+browse the [`docs/ directory`](https://github.com/Leaflet/Leaflet/tree/master/docs),
+choose a certain file for editing (e.g. `plugins.md` for the list of Leaflet plugins),
 click the Edit button, make changes and follow instructions from there.
 Once it gets merged, the changes will immediately appear on the website.
 
@@ -141,8 +164,11 @@ If you need to make edits in a local repository to see how it looks in the proce
 
  1. [Install Ruby](http://www.ruby-lang.org/en/) if don't have it yet.
  2. Run `gem install jekyll`.
- 3. Run `jekyll serve --watch` in the root `Leaflet` folder.
- 4. Open `localhost:4000` in your browser.
+ 3. Enter the directory where you cloned the Leaflet repository
+ 4. Make sure you are in the `master` branch by running `git checkout master`
+ 5. Enter the documentation subdirectory by running `cd docs`
+ 6. Run `jekyll serve --watch`.
+ 7. Open `localhost:4000` in your web browser.
 
 Now any file changes will be updated when you reload pages automatically.
 After committing the changes, just send a pull request.
@@ -155,17 +181,17 @@ code for every method, option or property there is a special code comment docume
 that feature. In order to edit the API documentation, just edit these comments in the
 source code.
 
-In order to generate the documentation, just run
+In order to generate the documentation, make sure that the development dependencies
+are installed (run either `npm install` or `yarn install`), then just run
 
 ```
-jake docs
+npm run docs
 ```
 
 and you'll find a `.html` file in the `dist/` directory.
 
 On every release of a new Leaflet version, this file will be generated and copied
-over to the `gh-pages` branch - there is no need to send pull requests to this
-branch anymore to update the API documentation.
+over to `docs/reference.html` - there is no need to send pull requests with changes to this file to update the API documentation.
 
 ## Code of Conduct
 
