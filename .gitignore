@@ -12,4 +12,7 @@ coverage/
 index.html
 .mailmap
 component.json
+/bower_components/
 /nbproject/private/
+nbproject/project.properties
+nbproject/project.xml
